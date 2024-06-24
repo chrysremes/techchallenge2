@@ -54,7 +54,7 @@ def scrap_selenium_to_html(browser,url,xpath_element):
     )
     element.click()
     driver.execute_script("arguments[0]", element)
-    time.sleep(3)
+    time.sleep(2)
     html=driver.page_source
     driver.quit()
 
@@ -65,7 +65,10 @@ def html_to_pd_bs4(html,table_class_name):
     table = soup.find('table', attrs={'class':table_class_name})
     return (pd.read_html(StringIO(str(table)))[0])
 
+
 html = scrap_selenium_to_html("Edge",SCRAP_BASE_URL,XPATH_SELECT_TABLE_SIZE_VALUE_120)
 df = html_to_pd_bs4(html,TABLE_CLASS_NAME)
+
+df.drop(df.tail(2).index,inplace=True)
 
 print(df)
