@@ -2,9 +2,6 @@ from .date_handling_b3custom import DateHandlingB3Custom
 
 class BolsaB3ModelDefs():
 
-    BASE_URL = "https://arquivos.b3.com.br/apinegocios/tickercsv/"
-    DATE_FORMAT = "%Y-%m-%d"
-
     SCRAP_BASE_URL = "https://sistemaswebb3-listados.b3.com.br/indexPage/day/ibov?language=pt-br"
     XPATH_SELECT_TABLE_SIZE_VALUE_120 = '//*[@id="selectPage"]/option[4]'
     TABLE_CLASS_NAME = "table table-responsive-sm table-responsive-md"
