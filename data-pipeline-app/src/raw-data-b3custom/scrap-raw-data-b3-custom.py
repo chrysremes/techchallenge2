@@ -1,10 +1,28 @@
-from bolsa_b3.defs_bolsa_b3custom import BolsaB3
-from file_handling.file_handling_b3custom_class import FileHandlerB3Custom
+import logging
 
-bolsa_b3 = BolsaB3()
-bolsa_b3.set_new_B3_url()
-print(bolsa_b3.B3_url)
+from bolsa_b3.defs_bolsa_b3custom import BolsaB3ModelDefs
+from data_manipulations.data_manipulations import DataHandle
+from scraping.scrap_selenium import ScrapSelenium
 
-df = bolsa_b3.scrap_to_df(bolsa_b3.B3_url)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)s %(message)s',
+    filemode='w',
+    filename="mainlog.log", 
+    encoding='utf-8', 
+    level=logging.DEBUG
+    )
 
-print(df)
+PATH_SAVE_PARQUET = ""
+b3 = BolsaB3ModelDefs()
+
+scrap_selenium = ScrapSelenium(browser="Edge")
+html_scraped = scrap_selenium.get_to_html(url=b3.SCRAP_BASE_URL, xpath_element=b3.XPATH_SELECT_TABLE_SIZE_VALUE_120)
+
+dh = DataHandle()
+df = dh.get_df_and_remove_n_last_lines(html=html_scraped, table_class_name=b3.TABLE_CLASS_NAME, n=2)
+fullfilename = dh.save_df_to_named_parquet(df,b3.FILE_DESCRIPTION,b3.DT_FORMAT,filepath=PATH_SAVE_PARQUET)
+print(fullfilename)
+
+df_read = dh.read_from_parquet(fullfilename)
+
+print(df_read)
