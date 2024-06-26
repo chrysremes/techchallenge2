@@ -56,19 +56,21 @@ class ScrapSelenium():
         return driver
 
     def get_to_html(
-            self, url:str, xpath_element:str)->str:
+            self, url:str, xpath_elements:list[str])->str:
 
         driver = self.get_browser_driver(self.browser)
         webwait = WebDriverWait(driver, self.max_webdriver_wait_til_secs)
         driver.get(url)
-        element = webwait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH, xpath_element)
+        for xpath in xpath_elements:
+            element = webwait.until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, xpath)
+                )
             )
-        )
-        element.click()
-        driver.execute_script("arguments[0]", element)
-        time.sleep(self.time_to_sleep_after_exec_secs)
+            element.click()
+            driver.execute_script("arguments[0]", element)
+            time.sleep(self.time_to_sleep_after_exec_secs)
+        
         html=driver.page_source
         driver.quit()
 

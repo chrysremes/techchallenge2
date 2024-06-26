@@ -14,9 +14,10 @@ logging.basicConfig(
 
 PATH_SAVE_PARQUET = ""
 b3 = BolsaB3ModelDefs()
+b3_xpaths = [b3.XPATH_SELECT_TABLE_SEGMENT, b3.XPATH_SELECT_TABLE_SIZE_VALUE_120]
 
 scrap_selenium = ScrapSelenium(browser="Edge")
-html_scraped = scrap_selenium.get_to_html(url=b3.SCRAP_BASE_URL, xpath_element=b3.XPATH_SELECT_TABLE_SIZE_VALUE_120)
+html_scraped = scrap_selenium.get_to_html(url=b3.SCRAP_BASE_URL, xpath_elements=b3_xpaths)
 
 dh = DataHandle()
 df = dh.get_df_and_remove_n_last_lines(html=html_scraped, table_class_name=b3.TABLE_CLASS_NAME, n=2)
