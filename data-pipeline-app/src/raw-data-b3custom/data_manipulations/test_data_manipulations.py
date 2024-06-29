@@ -45,20 +45,22 @@ def test_html_to_soup_is_wrong():
 
 def test_html_to_df_is_ok():
     dh = DataHandle()
-    df = dh.html_to_df(TEST_TABLE_HTML,table_class_name=TABLE_CLASS_NAME)
-    assert df["Country"][0] == "Germany"
+    dh.html_to_df(TEST_TABLE_HTML,table_class_name=TABLE_CLASS_NAME)
+    assert dh.df["Country"][0] == "Germany"
 
 def test_html_to_df_is_wrong():
     dh = DataHandle()
-    df = dh.html_to_df(TEST_TABLE_HTML,table_class_name=TABLE_CLASS_NAME)
-    assert not (df["Country"][1] == "Germany")
+    dh.html_to_df(TEST_TABLE_HTML,table_class_name=TABLE_CLASS_NAME)
+    assert not (dh.df["Country"][1] == "Germany")
 
 def test_remove_last_n_rows():
     N_REMOVE = 1
     dh = DataHandle()
-    df = dh.html_to_df(TEST_TABLE_HTML,table_class_name=TABLE_CLASS_NAME)
-    df_removed = dh.remove_last_n_lines(df,n=N_REMOVE)
-    assert (df.shape[0] - df_removed.shape[0]) == N_REMOVE
+    dh.html_to_df(TEST_TABLE_HTML,table_class_name=TABLE_CLASS_NAME)
+    df0 = dh.df.copy()
+    dh.remove_last_n_lines(n=N_REMOVE)
+    df_removed = dh.df
+    assert (df0.shape[0] - df_removed.shape[0]) == N_REMOVE
 
 def test_create_parquet_filename_is_ok():
     dh = DataHandle()

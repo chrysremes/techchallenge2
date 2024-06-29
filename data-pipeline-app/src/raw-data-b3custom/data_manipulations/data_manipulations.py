@@ -10,7 +10,7 @@ from io import StringIO
 class DataHandle():
 
     def __init__(self) -> None:
-        pass
+        self.df:pd.DataFrame = pd.DataFrame()
 
     def html_to_soup(self, html:str,table_class_name:str)->Any:
         logging.info("Finding table within scraped html source")
@@ -29,17 +29,23 @@ class DataHandle():
             logging.error("Something wrong with converting soup table to df")
             raise Exception("Something wrong with converting soup table to df")
 
-    def html_to_df(self, html:str, table_class_name:str)->pd.DataFrame:
+    def html_to_df(self, html:str, table_class_name:str)->None:
         table = self.html_to_soup(html, table_class_name)
-        return self.soup_to_df(table)
+        self.df = self.soup_to_df(table)
 
-    def remove_last_n_lines(self, df:pd.DataFrame, n:int)->pd.DataFrame:
+    def remove_last_n_lines(self, n:int)->None:
         logging.info(f"Removing last {n} rows from df")
         try:
-            return df.drop(df.tail(n).index)
+            self.df.drop(self.df.tail(n).index,inplace=True)
         except:
             logging.error("Something wrong with converting soup table to df")
             raise Exception("Something wrong with converting soup table to df")
+
+    def get_current_date(self,date_format:str="%Y-%m-%d")->datetime:
+        return datetime.now().strftime(date_format)
+
+    def insert_data_column_to_df(self,date_to_insert:datetime,loc:int=0,col_name:str="Data"):
+        self.df.insert(loc=loc,column=col_name,value=date_to_insert)
 
     def create_parquet_filename(self, file_prefix:str, date_format:str)->str:
         try:
@@ -61,7 +67,7 @@ class DataHandle():
         else:
             logging.info(f"Dir {filepath} already exists.")
 
-    def save_to_parquet(self, df:pd.DataFrame, filename:str, filepath:str)->str:
+    def save_to_parquet(self, filename:str, filepath:str)->str:
         try:
             if not self.check_if_file_path_is_empty(filepath):
                 logging.info(f"Non-empty filepath, check if path needs to be created")
@@ -71,7 +77,7 @@ class DataHandle():
             fullfilename = os.path.join(filepath, filename)
             logging.info(f"Writing {fullfilename} ...")
             print(f"Writing {fullfilename} ...")
-            df.to_parquet(fullfilename)
+            self.df.to_parquet(fullfilename)
             logging.info(f"Saved {fullfilename} file")
             print(f"Saved {fullfilename} file")
         except:
@@ -93,10 +99,12 @@ class DataHandle():
         logging.info("Parquet file read successfully!")
         return df_read
     
-    def get_df_and_remove_n_last_lines(self, html:str, table_class_name:str, n=2):
-        df = self.html_to_df(html, table_class_name)
-        return self.remove_last_n_lines(df,n)
+    def get_and_treat_df(self, html:str, table_class_name:str, n=2)->pd.DataFrame:
+        self.html_to_df(html, table_class_name)
+        self.remove_last_n_lines(n)
+        self.insert_data_column_to_df(date_to_insert=self.get_current_date())
+        return self.df
     
-    def save_df_to_named_parquet(self, df:pd.DataFrame, file_prefix:str, date_format:str, filepath:str="")->str:
+    def save_df_to_named_parquet(self, file_prefix:str, date_format:str, filepath:str="")->str:
         filename = self.create_parquet_filename(file_prefix, date_format)
-        return self.save_to_parquet(df,filename,filepath)
+        return self.save_to_parquet(filename,filepath)

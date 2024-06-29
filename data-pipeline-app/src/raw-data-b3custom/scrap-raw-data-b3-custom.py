@@ -20,8 +20,8 @@ scrap_selenium = ScrapSelenium(browser="Edge")
 html_scraped = scrap_selenium.get_to_html(url=b3.SCRAP_BASE_URL, xpath_elements=b3_xpaths)
 
 dh = DataHandle()
-df = dh.get_df_and_remove_n_last_lines(html=html_scraped, table_class_name=b3.TABLE_CLASS_NAME, n=2)
-fullfilename = dh.save_df_to_named_parquet(df,b3.FILE_DESCRIPTION,b3.DT_FORMAT,filepath=PATH_SAVE_PARQUET)
+dh.get_and_treat_df(html=html_scraped, table_class_name=b3.TABLE_CLASS_NAME, n=2)
+fullfilename = dh.save_df_to_named_parquet(b3.FILE_DESCRIPTION,b3.DT_FORMAT,filepath=PATH_SAVE_PARQUET)
 print(fullfilename)
 
 df_read = dh.read_from_parquet(fullfilename)
