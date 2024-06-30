@@ -10,14 +10,17 @@ logging.basicConfig(
     level=logging.DEBUG
     )
 
-FILE_NAME = 'raw-data-b3custom/DataB3_20240628.parquet'
+LOCAL_FILE_NAME = 'raw-data-b3custom/DataB3_20240628.parquet'
 
+logging.info("Constructing instances...")
 c = AWSCredentials()
 b = BucketArgs()
 hs3 = HandleS3Bucket()
+
 hs3.start_s3_client(c.ACCESS_KEY, c.SECRET_KEY, c.TOKEN_KEY)
-# hs3.set_s3_obj_attributes(b.BUCKET_NAME, FILE_NAME, b.PREFIX)
-# hs3.upload_to_s3()
-# hs3.list_from_s3()
-hs3.set_s3_obj_attributes(b.BUCKET_NAME, None, None, 'raw/DataB3_20240628.parquet')
+hs3.set_s3_obj_attributes(b.BUCKET_NAME, b.REMOTE_FILE_NAME, b.PREFIX)
+hs3.list_from_s3()
+hs3.upload_to_s3(LOCAL_FILE_NAME)
+hs3.list_from_s3()
 hs3.delete_from_s3()
+hs3.list_from_s3()
