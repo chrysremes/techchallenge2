@@ -3,3 +3,4 @@ __pycache__
 .pytest_cache
 *.parquet
 *.log
+*aws_credentials.py*
