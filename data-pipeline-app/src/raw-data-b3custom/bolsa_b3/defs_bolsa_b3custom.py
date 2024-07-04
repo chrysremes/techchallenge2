@@ -10,11 +10,15 @@ class BolsaB3ModelDefs():
 
     TIME_TO_SLEEP:int = 2
 
+    QTDE_COL_NAME = "Qtde"
+
     RENAME_DICT = {
         "Código" : "Codigo",
         "Ação" : "Acao",
-        "Qtde. Teórica" : "Qtde",
+        "Qtde. Teórica" : QTDE_COL_NAME,
         "Part. (%)" : "Setor_Part",
         "Part. (%)Acum." : "Setor_Part_Ac"
     }
+
+    
         

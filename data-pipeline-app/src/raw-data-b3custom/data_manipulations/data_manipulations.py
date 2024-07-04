@@ -54,6 +54,9 @@ class DataHandle():
     def insert_data_column_to_df(self,date_to_insert:datetime,loc:int=0,col_name:str="Data"):
         self.df.insert(loc=loc,column=col_name,value=date_to_insert)
 
+    def remove_thousand_sep_from_df(self,col_name:str, sep:str='.'):
+        self.df[col_name] = self.df[col_name].str.replace(sep, '').astype(int)
+
     def create_parquet_filename(self, file_prefix:str, date_format:str)->str:
         try:
             dtnow = datetime.now().strftime(date_format)
@@ -106,12 +109,13 @@ class DataHandle():
         logging.info("Parquet file read successfully!")
         return df_read
     
-    def get_and_treat_df(self, html:str, table_class_name:str, n=2, rename_cols:dict=None)->pd.DataFrame:
+    def get_and_treat_df(self, html:str, table_class_name:str, n=2, rename_cols:dict=None, qtde_col_name:str='Qtde')->pd.DataFrame:
         self.html_to_df(html, table_class_name)
         self.remove_last_n_lines(n)
         self.remove_multi_index_header()
         if rename_cols is not None:
             self.rename_df_columns(rename_cols)
+        self.remove_thousand_sep_from_df(col_name=qtde_col_name)
         self.insert_data_column_to_df(date_to_insert=self.get_current_date())
         return self.df
     
