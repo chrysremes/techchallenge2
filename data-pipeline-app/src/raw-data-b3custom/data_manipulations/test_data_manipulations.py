@@ -31,6 +31,14 @@ TEST_TABLE_HTML = f"""
 </html>
 """
 
+RENAME_DICT = {
+        "Código" : "Codigo",
+        "Ação" : "Acao",
+        "Qtde. Teórica" : "Qtde",
+        "Part. (%)" : "Setor_Part",
+        "Part. (%)Acum." : "Setor_Part_Ac"
+    }
+
 def test_html_to_soup_is_ok():
     dh = DataHandle()
     table = dh.html_to_soup(TEST_TABLE_HTML,table_class_name=TABLE_CLASS_NAME)
@@ -61,6 +69,16 @@ def test_remove_last_n_rows():
     dh.remove_last_n_lines(n=N_REMOVE)
     df_removed = dh.df
     assert (df0.shape[0] - df_removed.shape[0]) == N_REMOVE
+
+def test_rename_df_columns():
+    TEST_FILE = "Test_Data.parquet"
+    dh = DataHandle()
+    df0 = dh.read_from_parquet(TEST_FILE)
+    df0.columns = df0.columns.droplevel(0)
+    df0.reset_index()
+    dh.df = df0.copy()
+    dh.rename_df_columns(RENAME_DICT)
+    assert ("Codigo" in dh.df.columns and "Código" not in dh.df.columns)
 
 def test_create_parquet_filename_is_ok():
     dh = DataHandle()

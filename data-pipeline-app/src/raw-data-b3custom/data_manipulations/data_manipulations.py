@@ -43,6 +43,13 @@ class DataHandle():
 
     def get_current_date(self,date_format:str="%Y-%m-%d")->datetime:
         return datetime.now().strftime(date_format)
+    
+    def remove_multi_index_header(self):
+        self.df.columns = self.df.columns.droplevel(0)
+        self.df.reset_index()
+    
+    def rename_df_columns(self,rename_dict:dict):
+        self.df.rename(columns=rename_dict,inplace=True)
 
     def insert_data_column_to_df(self,date_to_insert:datetime,loc:int=0,col_name:str="Data"):
         self.df.insert(loc=loc,column=col_name,value=date_to_insert)
@@ -99,9 +106,12 @@ class DataHandle():
         logging.info("Parquet file read successfully!")
         return df_read
     
-    def get_and_treat_df(self, html:str, table_class_name:str, n=2)->pd.DataFrame:
+    def get_and_treat_df(self, html:str, table_class_name:str, n=2, rename_cols:dict=None)->pd.DataFrame:
         self.html_to_df(html, table_class_name)
         self.remove_last_n_lines(n)
+        self.remove_multi_index_header()
+        if rename_cols is not None:
+            self.rename_df_columns(rename_cols)
         self.insert_data_column_to_df(date_to_insert=self.get_current_date())
         return self.df
     
