@@ -10,6 +10,9 @@ class HandleS3Bucket():
         self.prefix:str = None
         self.remote_file_name:str = None
         self.full_remote_file_name:str = None
+    
+    def get_only_filename(self, fullfilename:str)->str:
+        return fullfilename.split('/')[-1]
 
     def start_s3_client(self, access_key, secret_key, token_key):
         logging.info("Starting S3 Client...")
