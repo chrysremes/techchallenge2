@@ -10,7 +10,7 @@ logging.basicConfig(
     level=logging.DEBUG
     )
 
-LOCAL_FILE_NAME = 'raw-data-b3custom/parquets/DataB3_20240703.parquet'
+LOCAL_FILE_NAME = 'raw-data-b3custom/parquets/DataB3_20240704.parquet'
 
 logging.info("Constructing instances...")
 c = AWSCredentials()
