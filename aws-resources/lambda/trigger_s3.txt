@@ -1,0 +1,12 @@
+S3: s3-chrys-mlet-lab-tc2
+arn:aws:s3:::s3-chrys-mlet-lab-tc2
+Details
+Bucket arn: arn:aws:s3:::s3-chrys-mlet-lab-tc2
+Event types: s3:ObjectCreated:*
+isComplexStatement: No
+Notification name: bbd930b9-14d7-44a2-92c3-8b8e10bf7142
+Prefix: raw/
+Service principal: s3.amazonaws.com
+Source account: 973335169715
+Statement ID: lambda-cd907cef-1594-407f-aa94-223ec799735a
+Suffix: last_day.parquet
