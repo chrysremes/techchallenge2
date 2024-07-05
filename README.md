@@ -4,7 +4,7 @@
 
 A tarefa é criar uma pipeline de ETL de dados, conforme fluxo mostrado abaixo:
 
-![workflow](./img/fluxo-tech-challenge-2.PNG)
+![workflow](fluxo-tech-challenge-2.PNG)
 
 No primeiro fluxo temos a ingestão de dados feita em batch (sob demanda), a ideia é rodar um script localmente que irá carregar os dados no bucket, o evento gerado pelo bucket irá trigar o job do glue, o job do glue irá realizar o etl dos dados salvando novamente no bucket, por fim esses dados serão disponibilizados em um dashboard do athena.
 
