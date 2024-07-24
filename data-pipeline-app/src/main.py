@@ -1,4 +1,5 @@
 import logging
+from raw_data_b3custom.f_scrap_raw_data_b3_custom import scrap_raw_data_b3
 from custom_bucket_s3.handler_s3 import HandleS3Bucket
 from custom_bucket_s3.aws_credentials import AWSCredentials, BucketArgs
 
@@ -10,7 +11,11 @@ logging.basicConfig(
     level=logging.DEBUG
     )
 
-LOCAL_FILE_NAME = 'raw-data-b3custom/parquets/DataB3_20240704.parquet'
+PARQUET_PATH = 'raw-data-b3custom/parquets/'
+
+scrap_raw_data_b3(PARQUET_PATH)
+
+LOCAL_FILE_NAME = PARQUET_PATH+'DataB3_20240704.parquet'
 
 logging.info("Constructing instances...")
 c = AWSCredentials()
