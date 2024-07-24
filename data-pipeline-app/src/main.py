@@ -11,7 +11,7 @@ logging.basicConfig(
     level=logging.DEBUG
     )
 
-PARQUET_PATH = 'raw-data-b3custom/parquets/'
+PARQUET_PATH = 'raw_data_b3custom/parquets/'
 
 scrap_raw_data_b3(PARQUET_PATH)
 

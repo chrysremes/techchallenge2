@@ -1,6 +1,6 @@
-from bolsa_b3.defs_bolsa_b3custom import BolsaB3ModelDefs
-from data_manipulations.data_manipulations import DataHandle
-from scraping.scrap_selenium import ScrapSelenium
+from .bolsa_b3.defs_bolsa_b3custom import BolsaB3ModelDefs
+from .data_manipulations.data_manipulations import DataHandle
+from .scraping.scrap_selenium import ScrapSelenium
 
 def scrap_raw_data_b3(path_to_save_parquet:str='raw-data-b3custom/parquets/'):
 
